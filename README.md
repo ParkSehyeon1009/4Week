@@ -134,3 +134,49 @@ class Sample
 <br>
 <br> **this 포인터** <br>
 <br>
+this 포인터는 클래스의 실제 인스턴스에 대한 주소를 가르키는 포인터이다.<br>
+아래는 예시이다.
+```cpp
+class Sample
+{
+  private:
+    int int_sample;
+  public:
+    Sample(int num)
+    {
+      int_sample = num;
+    ]
+    void Print()
+    {
+      cout << int_sample << endl;
+    }
+}
+void main()
+{
+  Sample sam(10);
+  sam.Print();
+}
+```
+결과값은 아래와 같다.
+```
+10
+```
+우리가 주목해야할 점은 sam.Print() 이다.<br>
+이 코드는 인수 없이 함수를 호출하는것처럼 보이지만 sam.Print(&sam)처럼 존재하고 있는것이다.<br>
+즉 매개변수로 전달된 인스턴스의 주소 이름이 this인 포인터 변수에 저장되는 것이다.<br>
+this 포인터를 사용하는 경우는 아래와 같다.<br>
+1. 클래스의 멤버 변수와 매개 변수가 동일한 경우
+2. 객체 자신의 주소를 리턴할 경우
+
+단 this 포인터는 static 멤버 함수에서 사용이 불가능한다.<br>
+(static 함수에서 this 포인터를 사용할수 없는 이유는 static함수는 객체가 없어도 생성이 되어 있을 수 있기 때문이다.)<br>
+<br>
+<br> **객체배열** <br>
+<br>
+일반 자료형도 배열을 사용하듯 객체 또한 배열로 만들어 사용할수 있다.
+```
+클래스명 객체명[]
+```
+<br> **클래스 사용 범위** <br>
+<br>
+<br> **추상화 데이터형** <br>
