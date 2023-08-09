@@ -145,7 +145,7 @@ class Sample
     Sample(int num)
     {
       int_sample = num;
-    ]
+    }
     void Print()
     {
       cout << int_sample << endl;
@@ -177,6 +177,102 @@ this 포인터를 사용하는 경우는 아래와 같다.<br>
 ```
 클래스명 객체명[]
 ```
+아래는 예제이다
+```cpp
+class Sample(){
+  private:
+    int a;
+  public:
+    Sample()
+    {
+      a = 0;
+    }
+    void Set(int num){a = num}
+    void Set() {cout << a << endl;}
+}
+
+void main()
+{
+  Sample Sam[3];
+  for(int i = 0; i < 3; i++)
+  {
+    Sam[i].Set(i);
+    Sam[i].Set();
+  }
+  
+}
+```
+결과값은 아래와 같다.
+```
+1
+2
+3
+```
 <br> **클래스 사용 범위** <br>
 <br>
+클래스 사용 범위는 클래스 데이터 멤버들의 이름이나 클래스 멤버 함수들의 이름과 같이<br>
+클래스 안에서 정의되는 이름들에 적용된다.<br>
+아래는 예시이다
+```cpp
+class Sample
+{
+  private:
+    int A; // A는 클래스 사용 범위를 가진다
+  public:
+    Sample(int f = 9) {A = f;} // A가 사용범위 안에 있다.
+}
+void Sample::ViewSample() const // Sample::가 ViewSample 를 사용범위 안에 넣는다. 
+{
+  cout << A << endl; // 클래스 메서드 안이므로 A는 사용범위
+}
+void main()
+{
+  Sample * pik = new Sample 
+  Sample ee = Sample(8) // 생성자는 클래스 이름을 갖기 때문에 사용 범위
+  ee.ViewSample(); // 클래스 객체가 ViewSample를 사용 범위에 넣음
+  pik->ViewSample() // Sample을 지시하는 포인터가 ViewSample를 사용 범위에 넣음
+}
+```
+또한 아래와 같은 예시가 있다.
+```cpp
+class Sample
+{
+  private:
+    const int A = 12;
+}
+```
+위의 코드는 동작하지 않는다. 이유는 클래스를 선언하는 것은 객체가 어떻게 생겨있는가를 서술하는것이다.<br>
+즉 그 객체를 생성하는것은 아니기에 객체가 생성될 때까지 기억공간은 마련되지 않는다.<br>
+그래서 C++은 static 키워드를 사용해 클래스 안에 상수를 정의하는 방법을 제공한다.
+```cpp
+class Sample
+{
+  private:
+    static const int A = 12;
+}
+```
+위에 처럼 코드를 작성하면 정적 변수들과 함께 저장되는 A라는 하나의 상수를 생성해준다.
 <br> **추상화 데이터형** <br>
+추상화 데이터형은 기능의 구현 부분을 나타내지 않고 순수한 기능이 무엇인지 나열한것을 뜻한다.<br>
+예시로 전자제품 사용설명서 같은것이다. 어떤 버튼을 누르면 기능이 실행되고 두개를 동시에 누르면 특정 작업이 실행되는등<br>
+그 제품의 기능이 무엇인지를 설명해주지만 버튼을 누를시 내부회로에서는 어떤 동작을 하는지는 설명을 안해준다.<br>
+추상화 데이터형은 사용설명서와 같이 기능과 사용 방법을 정의한 것이다.<br>
+아래는 예시이다
+```cpp
+class Student()
+{
+  string name;
+  int Number;
+  int grade;
+  int class;
+
+  Student(String name, int Numner, int grade, int class)
+  {
+    this->name = name;
+    this->Number = Number;
+    this->grade = grade;
+    this->class = class;
+  }
+}
+```
+# 11장 클래스의 활용
