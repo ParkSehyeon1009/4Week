@@ -277,12 +277,133 @@ class Student()
 ```
 # 11장 클래스의 활용
 **연산자 오버로딩**
+먼저 예시를 살펴보겠다.
+```cpp
+class NUMBOX
+{
+private:
+	int num1, num2;
+public:
+	NUMBOX(int num1, int num2) : num1(num1), num2(num2) { }
+	void ShowNumber() 
+	{
+		cout << "num1: " << num1 << ", num2: " << num2 << endl;
+	}
+};
 
+int main()
+{
+	NUMBOX nb1(10, 20);
+	NUMBOX nb2(5, 2);
+	NUMBOX result = nb1 + nb2;
 
+	nb1.ShowNumber();
+	nb2.ShowNumber();
+}
+```
+코드를 실행시키면 아래와 같은 에러가 발생한다
+```
+IntelliSense: 이러한 피연산자와 일치하는 "+" 연산자가 없습니다.
+```
+아래와 같이 코드를 작성하면 위와 같은 에러를 지울수 있다.
+```cpp
+class NUMBOX
+{
+private:
+	int num1, num2;
+public:
+	NUMBOX(int num1, int num2) : num1(num1), num2(num2) { }
+	void ShowNumber() 
+	{
+		cout << "num1: " << num1 << ", num2: " << num2 << endl;
+	}
+	NUMBOX operator+(NUMBOX &ref)
+	{
+		return NUMBOX(num1+ref.num1, num2+ref.num2);
+	}
+};
+
+int main()
+{
+	NUMBOX nb1(10, 20);
+	NUMBOX nb2(5, 2);
+	NUMBOX result = nb1 + nb2;
+
+	nb1.ShowNumber();
+	nb2.ShowNumber();
+	result.ShowNumber();
+}
+```
+우리가 살펴봐야할 부분은 바로 operator+ 이다.<br>
+operator는 연산자 오버로딩을 사용하기 위해 필요한 함수이다. 사용 방법은 아래와 같다.<br>
+```cpp
+리턴 타입 operator(연산자) (연산자가 받는 인자)
+```
 **프렌드의 도입**
-
-**오버로딩 연산자 : 멤버 함수와 멤버가 아닌 함수**
-
+프렌드는 A클래스가 B클래스에 직접적으로 접근할수 있게 해주는 함수이다.<br>
+사용 방법은 아래와 같다.
+```cpp
+friend 리턴값 프렌드함수명(파라미터)
+{
+  행위
+}
+```
+프렌드를 사용한다면 C++의 장점인 캡슐화를 해치기 때문에 사용이 권장되진 않는다.
 **오버로딩 보충 : Vector 클래스**
-
+Vector를 사용하기 위해서는 일단 Vector를 include 해줘야 한다.
+```cpp
+#include <vector>
+```
+그후 Vector 를 선언시켜주면 된다
+```cpp
+vector<T> v;
+```
+벡터는 템플릿 클래스이기 때문에 벡터의 타입을 <T> 안에 적어주어야 한다.<br>
+선언할때 크기의 한계가 정해진 배열의 한계를 극복한 것이 Vector 클래스이기 때문에 배열보다 훨씬 유용한 사용이 가능하다.<br>
+```cpp
+int main() {
+	vector<int> v;
+	cout << "벡터의 크기: " << v.size() << endl;
+	cout << "벡터가 비어있나요? " << (v.empty() ? "true" : "false") << endl;
+	v.push_back(1);
+	v.push_back(2);
+	v.push_back(3);
+	v.push_back(4);
+	v.push_back(5);
+	cout << "벡터가 비어있나요? " << (v.empty() ? "true" : "false") << endl;
+	cout << "벡터의 크기: " << v.size() << endl;
+	cout << "0번째 원소: " << v[0] << endl; //이렇게 []로도 접근 가능하고
+	cout << "3번째 원소: " << v.at(3) << endl; //이렇게 at() 함수로도 인덱스에 접근 가능
+	for (int i = 0; i < v.size(); i++) {
+		cout << v[i] << " ";
+	}
+	cout << endl;
+	v.pop_back();
+	for (int i = 0; i < v.size(); i++) {
+		cout << v[i] << " "; //마지막 원소였던 5가 삭제된 것을 볼 수 있음
+	}
+	cout << endl;
+	v.clear(); //벡터의 모든 원소 삭제
+	cout << "벡터의 크기: " << v.size() << endl;
+	cout << "벡터가 비어있나요? " << (v.empty() ? "true" : "false") << endl;
+	cout << endl;
+	return 0;
+}
+```
 **자동 변환과 클래스의 데이터형 변환**
+C++은 표준 자료형의 값이 다른 표준 자료형과 호환이 될 때 암시적 형 변환이 이루어진다.<br>
+만약 자동 데이터형 변환을 못하게 막고싶다면 explicit라는 키워드를 사용하면 된다.<br>
+```cpp
+explicit Stonewt(double lbs)
+```
+혹은 사용자 정의 강제 데이터형 변환을 하고싶을 경우 변환 함수를 사용하면 된다.<br>
+변환 함수 작성 방법은 아래와 같다.
+```cpp
+operator typeName();
+```
+변환함수는 아래와 같은 규칙이 있다.
+```cpp
+변환 함수는 클래스의 메서드여야 한다
+변환 함수는 리턴형을 가지면 안 된다.
+변환 함수는 매개변수를 가지면 안 된다.
+```
